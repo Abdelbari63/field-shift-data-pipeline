@@ -63,7 +63,6 @@ data inside the relevant panel and keep existing regional data on screen.
 | `/data/field-shift/<region_id>/planting_ml.json` | Historical rainfall replay and evaluation |
 | `/data/field-shift/<region_id>/planting_outlook.json` | Counts of autumn rainfall onset by month |
 | `/data/field-shift/<region_id>/climate_point.geojson` | Site climate metrics for GIS |
-| `/data/field-shift/doukkala/irrigation_demo.json` | Simulated dry and wet soil scenarios |
 
 After deployment, open `/data/field-shift/chaouia/recommendations.json` and
 `/data/field-shift/doukkala/recommendations.json`. Expect `site_id` values
@@ -80,7 +79,6 @@ python .\src\planting_analysis.py --site settat
 python .\src\planting_analysis.py --site doukkala
 python .\src\crop_recommendations.py --site settat
 python .\src\crop_recommendations.py --site doukkala
-python .\simulation\irrigation.py
 ```
 
 - Settat (Chaouia) uses the site ID `settat`. See `outputs/settat/` for its
@@ -90,8 +88,8 @@ python .\simulation\irrigation.py
   `python .\src\nasa_power.py --site doukkala --core-only`. Both sites use the
   same rainfall event definition. Validate its relevance to your Doukkala crop
   and irrigation scenario before applying it to planting decisions.
-- See `README-ML.md` for the evaluation method. `simulation/` provides example
-  irrigation data for the simulation teammate.
+- See `README-ML.md` for the evaluation method. The crop recommendation script
+  reads its template from `contracts/recommendations.example.json`.
 
 This prototype compares crops, estimates potential seasonal crop water demand,
 and exports historical rainfall analysis. It uses daily NASA POWER data for
@@ -100,9 +98,10 @@ climate data.
 
 ## Start here
 
-1. Give the app developer `handoff/field-shift/` and the two CSVs in `handoff/review/`.
-2. Give the simulation teammate `contracts/soil_reading.example.json`. Set `site_id` to `doukkala` for a Sidi Bennour scenario. Agree on UTC timestamps, calibrated moisture units and the visible simulated-data badge. Use a manual replay of dry and wet readings for the first demo.
-3. Run the climate extractor below. It uses Python 3.10+ and the standard library.
+Generate `handoff/field-shift/` using the export command above. Share that folder
+and the two CSVs in `handoff/review/` with the app developer.
+To refresh the climate inputs, run the extractor below. It uses Python 3.10+
+and the standard library.
 
 ```powershell
 python .\src\nasa_power.py
@@ -144,7 +143,7 @@ Exchange these files using `site_id` as the join key. GeoJSON point coordinates 
 
 | Field | Type and meaning |
 | --- | --- |
-| `soil_reading` | A reading shaped like `soil_reading.example.json`, or `null`. `source` is `sensor` or `simulated`. `status` is `ok`, `stale`, or `error`. `measured_at` is ISO 8601 UTC. `volumetric_water_content_m3_m3` is a calibrated fraction from 0 to 1, with depth in `depth_cm`. Keep that field `null` for an uncalibrated sensor index. |
+| `soil_reading` | An optional reading from the field or a simulation, or `null`. `source` is `sensor` or `simulated`. `status` is `ok`, `stale`, or `error`. `measured_at` is ISO 8601 UTC. `volumetric_water_content_m3_m3` is a calibrated fraction from 0 to 1, with depth in `depth_cm`. Keep that field `null` for an uncalibrated sensor index. |
 | `crops[].suitability_score` | Number from 0 to 100, or `null`. Describe the inputs used in `reasons`. Compare crops under the same water-access scenario. |
 | `crops[].planting_window` | `{"start_mm_dd":"11-01","end_mm_dd":"12-31","basis":"historical_climatology"}` or `null`. Dates here illustrate the shape only. The window can cross New Year. Once sourced, olive establishment and annual sowing/transplanting are labeled separately in `basis` and `reasons`. |
 | `crops[].crop_water_demand_mm` | Crop evapotranspiration summed over the modeled growing period. Define that period and crop stage in `reasons`. |

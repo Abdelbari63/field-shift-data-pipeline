@@ -41,7 +41,7 @@ indicate lower probability error. This backtest has five independent seasons.
 
 ## App handoff
 
-Run `python .\src\export_app_data.py` to refresh `handoff/data/<site>/planting_ml.json`
+Run `python .\src\export_app_data.py` to refresh `handoff/field-shift/<region_id>/planting_ml.json`
 for Field Shift. The file is keyed by site_id
 and replay year. Use the primary_probability_field for the main probability
 and display both the historical baseline and the experimental ML result in

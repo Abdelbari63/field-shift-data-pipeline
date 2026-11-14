@@ -1,0 +1,12 @@
+# Python environment and bytecode
+.venv/
+__pycache__/
+*.py[cod]
+
+# Exports generated from outputs/
+/handoff/field-shift/
+
+# Local irrigation simulation
+/simulation/
+/contracts/soil_reading.example.json
+/outputs/*/irrigation_demo.json
