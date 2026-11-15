@@ -4,6 +4,12 @@ Open this folder in VS Code. It includes the NASA POWER pipeline, climate data,
 crop recommendations and model results for Settat and Doukkala. The frontend
 is a separate project maintained by the Field Shift app developer.
 
+## Rainfall cross-check
+
+Compare NASA POWER with CHIRPS at both sites over the five 2020/21–2024/25 crop
+seasons. See the [rainfall comparison instructions](validation/README.md) for
+the daily inputs, comparison rules, and command to regenerate the chart and CSV.
+
 ## Connect to Field Shift
 
 The two reviewed CSVs in `handoff/review/` document inputs for
